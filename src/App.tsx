@@ -15,9 +15,11 @@ const App: React.FC = () => {
 
   return (
     <>
-      <h1>Todo App</h1>
-      <TodoForm />
-      <TodoList />
+      <h1>TASK MANAGEMENT APP</h1>
+      <div className="container">
+        <TodoForm />
+        <TodoList />
+      </div>
     </>
   );
 };

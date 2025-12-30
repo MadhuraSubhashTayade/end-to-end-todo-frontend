@@ -22,23 +22,27 @@ export const TodoForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Enter todo title"
-        required
-      />
-      <input
-        type="text"
-        name="desc"
-        value={desc}
-        onChange={(e) => setDesc(e.target.value)}
-        placeholder="Todo description here..."
-      />
-      <button type="submit">Add Todo</button>
-    </form>
+    <div className="form-container">
+      <p className="form-title">Task Form</p>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Enter todo title"
+          required
+        />
+        <textarea
+          rows={5}
+          cols={40}
+          name="desc"
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+          placeholder="Todo description here..."
+        />
+        <button type="submit">Add Todo</button>
+      </form>
+    </div>
   );
 };

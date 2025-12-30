@@ -8,7 +8,7 @@ const api = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-export const getTodos = async (): Promise<ITodo[]> => {
+export const getTodosApi = async (): Promise<ITodo[]> => {
   try {
     const response: AxiosResponse = await api.get("/todos");
     return response.data;
@@ -17,7 +17,7 @@ export const getTodos = async (): Promise<ITodo[]> => {
   }
 };
 
-export const getTodoById = async (id: string): Promise<ITodo> => {
+export const getTodoByIdApi = async (id: string): Promise<ITodo> => {
   try {
     const response: AxiosResponse = await api.get(`/todos/${id}`);
     return response.data;
@@ -26,7 +26,7 @@ export const getTodoById = async (id: string): Promise<ITodo> => {
   }
 };
 
-export const createTodo = async (data: Partial<ITodo>): Promise<ITodo> => {
+export const createTodoApi = async (data: Partial<ITodo>): Promise<ITodo> => {
   try {
     const response: AxiosResponse = await api.post("/todos", data);
     return response.data;
@@ -35,7 +35,7 @@ export const createTodo = async (data: Partial<ITodo>): Promise<ITodo> => {
   }
 };
 
-export const updateTodo = async (
+export const updateTodoApi = async (
   id: string,
   data: Partial<ITodo>
 ): Promise<ITodo> => {
@@ -47,7 +47,7 @@ export const updateTodo = async (
   }
 };
 
-export const deleteTodo = async (id: string): Promise<ITodo> => {
+export const deleteTodoApi = async (id: string): Promise<ITodo> => {
   try {
     const response: AxiosResponse = await api.delete(`/todos/${id}`);
     return response.data;

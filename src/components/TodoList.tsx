@@ -1,46 +1,25 @@
 import type React from "react";
-import { useEffect, useState } from "react";
-import type { ITodo } from "../types";
 import { TodoItem } from "./TodoItem";
-import { getTodos } from "../services/api";
+import { useSelector } from "react-redux";
+import type { RootState } from "../redux/store";
 
-interface ITodoProps {
-  onTodoDeleted: (id: string) => void;
-  onTodoUpdated: (todo: ITodo) => void;
-}
+export const TodoList: React.FC = () => {
+  const { todos } = useSelector((state: RootState) => state.todos);
 
-export const TodoList: React.FC<ITodoProps> = ({
-  onTodoDeleted,
-  onTodoUpdated,
-}: ITodoProps) => {
-  const [todos, setTodos] = useState<ITodo[]>([]);
-
-  useEffect(() => {
-    const fetchTodos = async () => {
-      const data = await getTodos();
-      setTodos(data);
-    };
-    fetchTodos();
-  }, []);
-
-  //   const handleDelete = (id: string) => {
-  //     setTodos(todos.filter((x) => x._id !== id));
-  //   };
-
-  //   const handleUpdate = (todo: ITodo) => {
-  //     setTodos(todos.map((x) => (x._id === todo._id ? todo : x)));
-  //   };
+  if (todos.length === 0) {
+    return <div className="empty-message">No todos yet. Add one above!</div>;
+  }
 
   return (
-    <>
+    <div className="todo-list">
       {todos.map((todo) => (
-        <TodoItem
+        <div
           key={todo._id}
-          todo={todo}
-          onTodoDeleted={onTodoDeleted}
-          onTodoUpdated={onTodoUpdated}
-        />
+          className={`todo-item ${todo.completed ? "completed" : ""}`}
+        >
+          <TodoItem todo={todo} />
+        </div>
       ))}
-    </>
+    </div>
   );
 };

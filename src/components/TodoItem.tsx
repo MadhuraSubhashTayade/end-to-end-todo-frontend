@@ -1,37 +1,48 @@
 import type React from "react";
 import type { ITodo } from "../types";
-import { deleteTodo, updateTodo } from "../services/api";
+import { useDispatch } from "react-redux";
+import { deleteTodo, updateTodo } from "../redux/slices/todoSlice";
+import type { AppDispatch } from "../redux/store";
 
 interface TodoProps {
   todo: ITodo;
-  onTodoUpdated: (todo: ITodo) => void;
-  onTodoDeleted: (id: string) => void;
 }
 
-export const TodoItem: React.FC<TodoProps> = ({
-  todo,
-  onTodoUpdated,
-  onTodoDeleted,
-}: TodoProps) => {
+export const TodoItem: React.FC<TodoProps> = ({ todo }) => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const handleToggle = async () => {
-    console.log("Update id:", todo._id);
-    const updatedTodo = await updateTodo(todo._id, {
-      completed: !todo.completed,
-    });
-    onTodoUpdated(updatedTodo);
+    try {
+      await dispatch(
+        updateTodo({ id: todo._id, data: { completed: !todo.completed } })
+      ).unwrap();
+    } catch (err: unknown) {
+      console.error("Error updating todo:", err);
+    }
   };
 
   const handleDelete = async () => {
-    await deleteTodo(todo._id);
-    onTodoDeleted(todo._id);
+    try {
+      await dispatch(deleteTodo({ id: todo._id })).unwrap();
+    } catch (err: unknown) {
+      console.error("Error deleting todo:", err);
+    }
   };
 
   return (
-    <div>
-      <h3>{todo.title}</h3>
+    <div className="todo-text">
+      <h3 className="">{todo.title}</h3>
       <p>{todo.description}</p>
-      <input type="checkbox" checked={todo.completed} onChange={handleToggle} />
-      <button onClick={handleDelete}>Delete</button>
+      <div className="checkbox-wrapper">
+        <input
+          type="checkbox"
+          checked={todo.completed}
+          onChange={handleToggle}
+        />
+      </div>
+      <button className="delete-button" onClick={handleDelete}>
+        Delete
+      </button>
     </div>
   );
 };

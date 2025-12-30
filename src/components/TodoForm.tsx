@@ -1,20 +1,19 @@
 import React, { useState } from "react";
-import type { ITodo } from "../types";
-import { createTodo } from "../services/api";
+import { useDispatch } from "react-redux";
+import { addTodo } from "../redux/slices/todoSlice";
+import type { AppDispatch } from "../redux/store";
 
-interface TodoProps {
-  onTodoAdded: (todo: ITodo) => void;
-}
-
-export const TodoForm: React.FC<TodoProps> = ({ onTodoAdded }: TodoProps) => {
+export const TodoForm: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [desc, setDesc] = useState<string>("");
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!title.trim()) return;
+
     try {
-      const newTodo: ITodo = await createTodo({ title, description: desc });
-      onTodoAdded(newTodo);
+      await dispatch(addTodo({ title, description: desc })).unwrap();
       setTitle("");
       setDesc("");
     } catch (error: unknown) {
@@ -30,6 +29,7 @@ export const TodoForm: React.FC<TodoProps> = ({ onTodoAdded }: TodoProps) => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Enter todo title"
+        required
       />
       <input
         type="text"

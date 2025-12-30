@@ -1,32 +1,25 @@
-import { useState } from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { TodoForm } from "./components/TodoForm";
 import { TodoList } from "./components/TodoList";
-import type { ITodo } from "./types";
+import { useDispatch } from "react-redux";
+import { fetchTodos } from "./redux/slices/todoSlice";
+import type { AppDispatch } from "./redux/store";
 
-function App() {
-  const [todos, setTodos] = useState<ITodo[]>([]);
+const App: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
 
-  const handleTodoAdded = (newTodo: ITodo) => {
-    setTodos([newTodo, ...todos]);
-  };
-  const handleTodoUpdated = (updatedTodo: ITodo) => {
-    setTodos(todos.map((x) => (x._id === updatedTodo._id ? updatedTodo : x)));
-  };
-  const handleTodoDeleted = (id: string) => {
-    setTodos(todos.filter((x) => x._id !== id));
-  };
+  useEffect(() => {
+    dispatch(fetchTodos());
+  }, [dispatch]);
 
   return (
     <>
       <h1>Todo App</h1>
-      <TodoForm onTodoAdded={handleTodoAdded} />
-      <TodoList
-        onTodoUpdated={handleTodoUpdated}
-        onTodoDeleted={handleTodoDeleted}
-      />
+      <TodoForm />
+      <TodoList />
     </>
   );
-}
+};
 
 export default App;
